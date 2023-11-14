@@ -65,7 +65,7 @@
             <td th:text="${product.quantity}"></td>
             <td th:text="${product.price}"></td>
             <td>
-              <button class="btn btn-warning btn-sm mr-2">Edit</button>
+              <a th:href="@{'/editProduct/' + ${product.id}}" class="btn btn-warning btn-sm mr-2">Edit</a>
               <a
                 th:href="@{'/deleteProduct/' + ${product.id}}"
                 class="btn btn-danger btn-sm"

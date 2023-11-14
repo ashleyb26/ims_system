@@ -1,9 +1,7 @@
 package com.example.ims.controller;
 
 import com.example.ims.dto.ProductDto;
-// import com.example.ims.model.Product;
 import com.example.ims.service.ProductService;
-// import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +23,7 @@ public class ProductController {
     @PostMapping("/addProduct")
     public String addProduct(@ModelAttribute ProductDto productDto) {
         productService.saveProduct(productDto);
-        return "redirect:/home"; // Redirect to the home page after adding a product
+        return "redirect:/home"; // redirect to home
     }
 
     @GetMapping("/home")
@@ -36,9 +34,26 @@ public class ProductController {
     }
 
     @GetMapping("/deleteProduct/{productId}")
-    public String deleteProduct(@PathVariable Long Id) {
-        productService.deleteProductById(Id);
-        return "redirect:/home"; // Redirect to the home page after deleting a product
+    public String deleteProduct(@PathVariable Long productId) {
+        productService.deleteProductById(productId);
+        return "redirect:/home"; // redirect to home
     }
+
+    @GetMapping("/editProduct/{productId}")
+    public String editProduct(@PathVariable Long productId, Model model) {
+        ProductDto productDto = productService.findProductById(productId);
+    
+        model.addAttribute("product", productDto);
+    
+        return "editProduct";
+    }
+    
+
+    @PostMapping("/updateProduct")
+    public String updateProduct(@ModelAttribute ProductDto productDto) {
+        productService.updateProduct(productDto);
+        return "redirect:/home"; // redirect to home
+    }
+    
 
 }
