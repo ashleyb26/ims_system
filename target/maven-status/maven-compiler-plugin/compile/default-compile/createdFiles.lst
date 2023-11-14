@@ -1,0 +1,6 @@
+com\example\ims\dto\ProductDto.class
+com\example\ims\ImsApplication.class
+com\example\ims\repository\ProductRepository.class
+com\example\ims\controller\ProductController.class
+com\example\ims\model\Product.class
+com\example\ims\service\ProductService.class

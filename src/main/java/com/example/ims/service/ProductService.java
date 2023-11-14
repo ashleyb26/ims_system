@@ -3,12 +3,14 @@ package com.example.ims.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.example.ims.dto.ProductDto;
 import com.example.ims.model.Product;
 import com.example.ims.repository.ProductRepository;
 
+import org.springframework.data.domain.Pageable;
 
 
 @Service
@@ -22,6 +24,11 @@ public class ProductService {
     
     public Product findProductByName(String name) {
         return productRepository.findByName(name);
+    }
+
+    public Page<ProductDto> findAllProduct(Pageable pageable) {
+        Page<Product> products = productRepository.findAll(pageable);
+        return products.map(this::mapToProductDto);
     }
 
     public void saveProduct(ProductDto productDto) {
@@ -67,5 +74,12 @@ public class ProductService {
             existingProduct.setPrice(productDto.getPrice());
             productRepository.save(existingProduct);
         }
+    }
+
+    public List<ProductDto> searchProducts(String searchInput) {
+        List<Product> searchResults = productRepository.findByNameContainingIgnoreCase(searchInput);
+        return searchResults.stream()
+                .map(this::mapToProductDto)
+                .collect(Collectors.toList());
     }
 }

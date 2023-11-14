@@ -41,8 +41,18 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `price`, `quantity`) VALUES
-(1, 'Monitor', 599.5, 100),
-(2, 'Keyboard', 20, 50);
+(1, 'Asus Monitor TUF VG-9Q', 759.00, 100),
+(2, 'Logitech Keyboard K120', 20, 50),
+(3, 'HP Wireless Mouse X3000', 15.99, 30),
+(4, 'Samsung SSD 500GB', 99.99, 20),
+(5, 'Canon PIXMA MX492 Printer', 69.95, 15),
+(6, 'Dell Ultrasharp U2719D Monitor', 349.99, 80),
+(7, 'Corsair K95 RGB Platinum XT Keyboard', 199.99, 25),
+(8, 'Razer DeathAdder Elite Gaming Mouse', 69.99, 40),
+(9, 'Western Digital WD Black 1TB HDD', 54.99, 30),
+(10, 'Epson EcoTank ET-2760 All-in-One Printer', 249.99, 10),
+(11, 'LG 27GL83A-B Gaming Monitor', 379.99, 60),
+(12, 'Microsoft Sculpt Ergonomic Keyboard', 79.99, 15);
 
 --
 -- Indexes for dumped tables
