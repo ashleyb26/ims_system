@@ -19,6 +19,10 @@ public class ProductService {
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
+    
+    public Product findProductByName(String name) {
+        return productRepository.findByName(name);
+    }
 
     public void saveProduct(ProductDto productDto) {
         Product product = new Product();
@@ -27,10 +31,6 @@ public class ProductService {
         product.setQuantity(productDto.getQuantity());
 
         productRepository.save(product);
-    }
-
-    public Product findProductByName(String name) {
-        return productRepository.findByName(name);
     }
 
     public List<ProductDto> findAllProduct() {

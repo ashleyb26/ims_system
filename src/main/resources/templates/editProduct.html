@@ -14,22 +14,18 @@
       <h2>Edit Product</h2>
 
       <form th:action="@{/updateProduct}" th:object="${product}" method="post" class="form-inline mt-3">
-        <!-- Hidden input for ID -->
         <input type="hidden" th:field="*{id}" />
 
-        <!-- Item Name -->
         <div class="form-group mr-2">
           <label for="itemName">Item Name: </label>
           <input type="text" class="form-control" th:field="*{name}" placeholder="Enter Item Name" required />
         </div>
 
-        <!-- Quantity -->
         <div class="form-group mr-2">
           <label for="itemQuantity">Quantity: </label>
           <input type="number" class="form-control" th:field="*{quantity}" placeholder="Enter Quantity" required />
         </div>
 
-        <!-- Price -->
         <div class="form-group mr-2">
           <label for="itemPrice">Price: </label>
           <input type="number" min="1" step="any" class="form-control" th:field="*{price}" placeholder="Enter Price" required />
@@ -39,7 +35,6 @@
       </form>
     </div>
 
-    <!-- Include jQuery, Popper.js, and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
