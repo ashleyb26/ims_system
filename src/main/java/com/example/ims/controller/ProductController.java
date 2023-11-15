@@ -15,6 +15,8 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 
 @Controller
 public class ProductController {
@@ -31,11 +33,18 @@ public class ProductController {
         return "redirect:/home"; // redirect to home
     }
 
-    
+    @PostMapping("/search")
+    public String search(@RequestParam String searchInput, Model model) {
+        List<ProductDto> searchProducts = productService.searchResults(searchInput);
+        model.addAttribute("searchProducts", searchProducts);
+        return "searchProducts";
+    }
+
     @GetMapping("/home")
-    public String home(Model model, @RequestParam(defaultValue = "0") int page) {
+    public String home(Model model, @RequestParam(defaultValue = "0") int page,
+                    @RequestParam(defaultValue = "name") String sortBy) {
         int pageSize = 10; // Number of products per page
-        Pageable pageable = PageRequest.of(page, pageSize);
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sortBy));
 
         Page<ProductDto> productPage = productService.findAllProduct(pageable);
         List<ProductDto> products = productPage.getContent();
@@ -43,6 +52,7 @@ public class ProductController {
         model.addAttribute("products", products);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", productPage.getTotalPages());
+        model.addAttribute("sortBy", sortBy);
 
         return "home";
     }
@@ -69,10 +79,5 @@ public class ProductController {
         return "redirect:/home"; // redirect to home
     }
     
-    @PostMapping("/search")
-    public String search(@RequestParam String searchInput, Model model) {
-        List<ProductDto> searchResults = productService.searchProducts(searchInput);
-        model.addAttribute("searchResults", searchResults);
-        return "searchResults";
-    }
+
 }

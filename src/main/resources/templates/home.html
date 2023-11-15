@@ -51,23 +51,37 @@
 
       <form th:action="@{/search}" method="post" class="form-inline mt-3">
         <div class="form-group mr-2">
-            <input
-                    type="text"
-                    class="form-control"
-                    id="searchInput"
-                    name="searchInput"
-                    placeholder="Search by Product Name"
-            />
+          <input
+            type="text"
+            class="form-control"
+            id="searchInput"
+            name="searchInput"
+            placeholder="Search by Product Name"
+          />
         </div>
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form> 
+        <button type="submit" class="btn btn-primary mr-2">Search</button>
+        <a th:href="@{/home}" class="btn btn-primary">Home</a>
+      </form>
 
       <table id="productTable" class="table mt-3">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Quantity</th>
-            <th>Price</th>
+            <th>
+              <a th:href="@{'/home?page=' + ${currentPage} + '&sortBy=name'}"
+                >Name</a
+              >
+            </th>
+            <th>
+              <a
+                th:href="@{'/home?page=' + ${currentPage} + '&sortBy=quantity'}"
+                >Quantity</a
+              >
+            </th>
+            <th>
+              <a th:href="@{'/home?page=' + ${currentPage} + '&sortBy=price'}"
+                >Price</a
+              >
+            </th>
             <th>Action</th>
           </tr>
         </thead>
@@ -77,17 +91,32 @@
             <td th:text="${product.quantity}"></td>
             <td th:text="${product.price}"></td>
             <td>
-              <a th:href="@{'/editProduct/' + ${product.id}}" class="btn btn-warning btn-sm mr-2">Edit</a>
-              <a th:href="@{'/deleteProduct/' + ${product.id}}" class="btn btn-danger btn-sm">Delete</a>
+              <a
+                th:href="@{'/editProduct/' + ${product.id}}"
+                class="btn btn-warning btn-sm mr-2"
+                >Edit</a
+              >
+              <a
+                th:href="@{'/deleteProduct/' + ${product.id}}"
+                class="btn btn-danger btn-sm"
+                >Delete</a
+              >
             </td>
           </tr>
         </tbody>
       </table>
       <nav aria-label="Page navigation">
         <ul class="pagination">
-            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages-1)}">
-                <a class="page-link" th:href="@{'/home?page=' + ${i}}" th:text="${i}+1"></a>
-            </li>
+          <li
+            class="page-item"
+            th:each="i : ${#numbers.sequence(0, totalPages-1)}"
+          >
+            <a
+              class="page-link"
+              th:href="@{'/home?page=' + ${i} + '&sortBy=' + ${sortBy}}"
+              th:text="${i}+1"
+            ></a>
+          </li>
         </ul>
       </nav>
     </div>
@@ -100,21 +129,27 @@
     <script>
       function filterTable() {
         var input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById("searchInput");
+        input = document.getElementById('searchInput');
         filter = input.value.toUpperCase();
-        table = document.getElementById("productTable");
-        tr = table.getElementsByTagName("tr");
+        table = document.getElementById('productTable');
+        tr = table.getElementsByTagName('tr');
 
         for (i = 0; i < tr.length; i++) {
-          td = tr[i].getElementsByTagName("td")[0]; 
-          if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-              tr[i].style.display = "";
-            } else {
-              tr[i].style.display = "none";
+          var found = false; // Flag to check if the search term is found in any column
+          // Loop through all columns of the current row
+          for (var j = 0; j < tr[i].cells.length; j++) {
+            td = tr[i].cells[j];
+            if (td) {
+              txtValue = td.textContent || td.innerText;
+              // Check if the search term is found in the current column
+              if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                found = true;
+                break; // Exit the inner loop if found in this column
+              }
             }
           }
+          // Show or hide the row based on whether the search term is found
+          tr[i].style.display = found ? '' : 'none';
         }
       }
     </script>

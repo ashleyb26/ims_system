@@ -76,9 +76,9 @@ public class ProductService {
         }
     }
 
-    public List<ProductDto> searchProducts(String searchInput) {
-        List<Product> searchResults = productRepository.findByNameContainingIgnoreCase(searchInput);
-        return searchResults.stream()
+    public List<ProductDto> searchResults(String searchInput) {
+        List<Product> searchProducts = productRepository.findByNameContainingIgnoreCase(searchInput);
+        return searchProducts.stream()
                 .map(this::mapToProductDto)
                 .collect(Collectors.toList());
     }
