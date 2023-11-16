@@ -19,4 +19,6 @@ public class ProductDto {
     @NotEmpty
     private float price;
 
+    private Long categoryId;
+
 }

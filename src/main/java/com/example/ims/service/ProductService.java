@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.ims.dto.ProductDto;
 import com.example.ims.model.Product;
+import com.example.ims.model.Category;
 import com.example.ims.repository.ProductRepository;
 
 import org.springframework.data.domain.Pageable;
@@ -36,6 +37,12 @@ public class ProductService {
         product.setName(productDto.getName());
         product.setPrice(productDto.getPrice());
         product.setQuantity(productDto.getQuantity());
+
+        if (productDto.getCategoryId() != null) {
+            Category category = new Category(); 
+            category.setId(productDto.getCategoryId()); 
+            product.setCategory(category); 
+        }
 
         productRepository.save(product);
     }
@@ -75,10 +82,17 @@ public class ProductService {
             productRepository.save(existingProduct);
         }
     }
+    // for search result
+    // public List<ProductDto> searchResults(String searchInput) {
+    //     List<Product> searchProducts = productRepository.findByNameContainingIgnoreCase(searchInput);
+    //     return searchProducts.stream()
+    //             .map(this::mapToProductDto)
+    //             .collect(Collectors.toList());
+    // }
 
-    public List<ProductDto> searchResults(String searchInput) {
-        List<Product> searchProducts = productRepository.findByNameContainingIgnoreCase(searchInput);
-        return searchProducts.stream()
+    public List<ProductDto> findProductsByCategory(Long categoryId) {
+        List<Product> products = productRepository.findByCategory_Id(categoryId);
+        return products.stream()
                 .map(this::mapToProductDto)
                 .collect(Collectors.toList());
     }

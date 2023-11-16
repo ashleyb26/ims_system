@@ -10,8 +10,15 @@
     />
   </head>
   <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+          <a class="navbar-brand" th:href="@{/home}">Inventory Management System</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>          
+      </div>
+    </nav>
     <div class="container mt-5">
-      <h2>Inventory Management System</h2>
 
       <form th:action="@{/addProduct}" method="post" class="form-inline mt-3">
         <div class="form-group mr-2">
@@ -46,22 +53,25 @@
             required
           />
         </div>
+        <div class="form-group mr-2">
+          <select class="form-control" id="itemCategory" name="categoryId">
+              <option value="" disabled selected>Select Category</option>
+              <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" required></option>
+          </select>
+        </div>
         <button type="submit" class="btn btn-primary">Add Item</button>
       </form>
 
       <form th:action="@{/search}" method="post" class="form-inline mt-3">
         <div class="form-group mr-2">
-          <input
-            type="text"
-            class="form-control"
-            id="searchInput"
-            name="searchInput"
-            placeholder="Search by Product Name"
-          />
+            <select class="form-control" id="categoryFilter" name="categoryFilter">
+                <option value="0">All Categories</option>
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+            </select>
         </div>
         <button type="submit" class="btn btn-primary mr-2">Search</button>
         <a th:href="@{/home}" class="btn btn-primary">Home</a>
-      </form>
+    </form>
 
       <table id="productTable" class="table mt-3">
         <thead>

@@ -1,6 +1,8 @@
 package com.example.ims.controller;
 
 import com.example.ims.dto.ProductDto;
+import com.example.ims.model.Category;
+import com.example.ims.service.CategoryService;
 import com.example.ims.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,9 +24,16 @@ import org.springframework.data.domain.Sort;
 public class ProductController {
 
     private ProductService productService;
+    private CategoryService categoryService; // Add CategoryService
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
+    }
+
+    @GetMapping("/")
+    public String redirectToHome() {
+        return "redirect:/home";
     }
 
     @PostMapping("/addProduct")
@@ -34,15 +43,34 @@ public class ProductController {
     }
 
     @PostMapping("/search")
-    public String search(@RequestParam String searchInput, Model model) {
-        List<ProductDto> searchProducts = productService.searchResults(searchInput);
-        model.addAttribute("searchProducts", searchProducts);
+    public String search(@RequestParam(name = "categoryFilter", required = false) Long categoryId, Model model) {
+
+        if (categoryId != null) {
+            if (categoryId.equals(0L)) {
+                // If "All Categories" is selected, redirect to home
+                return "redirect:/home";
+            } else {
+                // Handle category-based search
+                List<ProductDto> searchProducts = productService.findProductsByCategory(categoryId);
+                model.addAttribute("searchProducts", searchProducts);
+            }
+        }
+
+        // Add categories for dropdown
+        List<Category> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
+
         return "searchProducts";
     }
+    
 
     @GetMapping("/home")
     public String home(Model model, @RequestParam(defaultValue = "0") int page,
                     @RequestParam(defaultValue = "name") String sortBy) {
+        // Fetch categories and add them to the model
+        List<Category> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
+
         int pageSize = 10; // Number of products per page
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sortBy));
 
@@ -79,5 +107,10 @@ public class ProductController {
         return "redirect:/home"; // redirect to home
     }
     
-
+    @GetMapping("/productsByCategory/{categoryId}")
+    public String productsByCategory(@PathVariable Long categoryId, Model model) {
+        List<ProductDto> products = productService.findProductsByCategory(categoryId);
+        model.addAttribute("products", products);
+        return "productsByCategory";
+    }
 }
