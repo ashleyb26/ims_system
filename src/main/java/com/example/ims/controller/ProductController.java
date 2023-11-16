@@ -24,7 +24,7 @@ import org.springframework.data.domain.Sort;
 public class ProductController {
 
     private ProductService productService;
-    private CategoryService categoryService; // Add CategoryService
+    private CategoryService categoryService; 
 
     public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
@@ -47,16 +47,13 @@ public class ProductController {
 
         if (categoryId != null) {
             if (categoryId.equals(0L)) {
-                // If "All Categories" is selected, redirect to home
                 return "redirect:/home";
             } else {
-                // Handle category-based search
                 List<ProductDto> searchProducts = productService.findProductsByCategory(categoryId);
                 model.addAttribute("searchProducts", searchProducts);
             }
         }
 
-        // Add categories for dropdown
         List<Category> categories = categoryService.getAllCategories();
         model.addAttribute("categories", categories);
 
@@ -67,11 +64,10 @@ public class ProductController {
     @GetMapping("/home")
     public String home(Model model, @RequestParam(defaultValue = "0") int page,
                     @RequestParam(defaultValue = "name") String sortBy) {
-        // Fetch categories and add them to the model
         List<Category> categories = categoryService.getAllCategories();
         model.addAttribute("categories", categories);
 
-        int pageSize = 10; // Number of products per page
+        int pageSize = 10; 
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sortBy));
 
         Page<ProductDto> productPage = productService.findAllProduct(pageable);
